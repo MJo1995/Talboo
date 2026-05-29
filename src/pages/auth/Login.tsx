@@ -60,25 +60,37 @@ export function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-svh items-center justify-center bg-background px-4">
-      <Card className="w-full max-w-md shadow-sm">
-        <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-semibold tracking-tight">
+    <div className="relative flex min-h-svh flex-col items-center justify-center bg-[#0a0a0b] px-4 overflow-hidden">
+      {/* Subtle radial gradients for background SaaS effect */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/5 blur-[120px] rounded-full pointer-events-none" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-primary/10 blur-[100px] rounded-full pointer-events-none opacity-50" />
+
+      {/* Minimal dot grid pattern */}
+      <div className="absolute inset-0 bg-[radial-gradient(#ffffff15_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none opacity-30" />
+
+      {/* Logo */}
+      <div className="relative z-10 -mb-16 sm:-mb-24 w-full flex flex-col items-center justify-center drop-shadow-[0_0_15px_rgba(95,212,195,0.2)] pointer-events-none">
+        <img src="/assets/logo.png" alt="TABLO" className="w-[700px] sm:w-[900px] max-w-[90vw] h-auto object-contain mx-auto" />
+      </div>
+
+      <Card className="relative z-10 w-full max-w-md bg-black/60 backdrop-blur-xl border-white/10 shadow-2xl rounded-2xl">
+        <CardHeader className="text-center pb-6">
+          <CardTitle className="text-3xl font-bold tracking-tight text-white">
             Welcome back
           </CardTitle>
-          <CardDescription>
+          <CardDescription className="text-white/60 text-base mt-2">
             Sign in to your TABLO account to continue
           </CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit}>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-5">
             {error && (
-              <div className="rounded-lg border border-destructive/50 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+              <div className="rounded-lg border border-destructive/50 bg-destructive/10 px-4 py-3 text-sm text-destructive font-medium">
                 {error}
               </div>
             )}
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email" className="text-white/80 font-medium">Email</Label>
               <Input
                 id="email"
                 type="email"
@@ -87,10 +99,11 @@ export function LoginPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 autoComplete="email"
+                className="bg-black/40 border-white/10 text-white placeholder:text-white/30 focus-visible:ring-1 focus-visible:ring-primary/50 focus-visible:border-primary/50 transition-all h-11"
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password" className="text-white/80 font-medium">Password</Label>
               <Input
                 id="password"
                 type="password"
@@ -99,34 +112,32 @@ export function LoginPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 autoComplete="current-password"
+                className="bg-black/40 border-white/10 text-white placeholder:text-white/30 focus-visible:ring-1 focus-visible:ring-primary/50 focus-visible:border-primary/50 transition-all h-11"
               />
             </div>
           </CardContent>
-          <CardFooter className="flex flex-col gap-4">
+          <CardFooter className="flex flex-col gap-5 pt-2">
             <Button
               type="submit"
-              className="w-full"
+              className="w-full h-11 bg-primary text-primary-foreground hover:bg-primary/90 shadow-[0_0_20px_rgba(95,212,195,0.15)] transition-all font-semibold text-base"
               disabled={isSubmitting}
             >
-              {isSubmitting && <Spinner data-icon="inline-start" />}
+              {isSubmitting && <Spinner data-icon="inline-start" className="mr-2" />}
               Sign In
             </Button>
 
-            <div className="relative w-full">
-              <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t" />
-              </div>
-              <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-background px-2 text-muted-foreground">
-                  Or continue with
-                </span>
-              </div>
+            <div className="flex items-center w-full gap-4">
+              <div className="flex-1 h-px bg-white/10" />
+              <span className="text-xs uppercase tracking-wider text-white/40">
+                Or continue with
+              </span>
+              <div className="flex-1 h-px bg-white/10" />
             </div>
 
             <Button
               type="button"
               variant="outline"
-              className="w-full"
+              className="w-full h-11 bg-white/5 border-white/10 text-white hover:bg-white/10 hover:text-white transition-colors"
               onClick={async () => {
                 await supabase.auth.signInWithOAuth({
                   provider: 'google',
@@ -136,7 +147,7 @@ export function LoginPage() {
                 });
               }}
             >
-              <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
+              <svg className="mr-2 h-5 w-5" viewBox="0 0 24 24">
                 <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
                 <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
                 <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05" />
@@ -146,27 +157,29 @@ export function LoginPage() {
               Continue with Google
             </Button>
 
-            <p className="text-sm text-muted-foreground mt-2">
+            <p className="text-sm text-white/50 mt-2 text-center">
               Don&apos;t have an account?{" "}
               <Link
                 to="/signup"
-                className="font-medium text-primary underline-offset-4 hover:underline"
+                className="font-medium text-primary underline-offset-4 hover:underline transition-colors"
               >
                 Sign up
               </Link>
             </p>
-            <div className="mt-2 text-center">
-              <Link
-                to="/kitchen-login"
-                className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-              >
-                <ChefHat className="size-4" />
-                Kitchen Device Login
-              </Link>
-            </div>
           </CardFooter>
         </form>
       </Card>
+
+      {/* Kitchen Login - Secondary Action Card */}
+      <div className="relative z-10 w-full max-w-md mt-6">
+        <Link
+          to="/kitchen-login"
+          className="flex items-center justify-center gap-2 w-full py-4 bg-white/5 hover:bg-white/10 text-white/70 hover:text-white border border-white/10 rounded-xl transition-all shadow-sm"
+        >
+          <ChefHat className="size-5" />
+          <span className="font-medium">Kitchen Device Login</span>
+        </Link>
+      </div>
     </div>
   );
 }
