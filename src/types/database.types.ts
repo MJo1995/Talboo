@@ -177,6 +177,7 @@ export interface Database {
           restaurant_id: string;
           table_number: string;
           qr_code_identifier: string;
+          qr_slug: string;
           created_at: string;
         };
         Insert: {
@@ -184,6 +185,7 @@ export interface Database {
           restaurant_id: string;
           table_number: string;
           qr_code_identifier: string;
+          qr_slug?: string;
           created_at?: string;
         };
         Update: {
@@ -191,6 +193,7 @@ export interface Database {
           restaurant_id?: string;
           table_number?: string;
           qr_code_identifier?: string;
+          qr_slug?: string;
           created_at?: string;
         };
         Relationships: [

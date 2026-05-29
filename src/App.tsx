@@ -27,7 +27,7 @@ export function App() {
         <Route path="/auth/callback" element={<AuthCallback />} />
 
         {/* Public QR menu route */}
-        <Route path="/menu/:slug/:tableId" element={<QRMenuPage />} />
+        <Route path="/menu/:slug/:tableSlug" element={<QRMenuPage />} />
 
         {/* Admin routes — owner/manager only */}
         <Route

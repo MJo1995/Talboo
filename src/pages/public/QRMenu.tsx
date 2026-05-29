@@ -126,7 +126,7 @@ const DICTIONARY = {
 };
 
 export function QRMenuPage() {
-  const { slug, tableId } = useParams<{ slug: string; tableId: string }>();
+  const { slug, tableSlug } = useParams<{ slug: string; tableSlug: string }>();
 
   const [isArabic, setIsArabic] = useState(false);
   const t = isArabic ? DICTIONARY.ar : DICTIONARY.en;
@@ -139,9 +139,9 @@ export function QRMenuPage() {
   const [tableUuid, setTableUuid] = useState("");
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [cart, setCart] = useState<CartItem[]>(() => {
-    if (!slug || !tableId) return [];
+    if (!slug || !tableSlug) return [];
     try {
-      const stored = localStorage.getItem(`tablo_cart_${slug}_${tableId}`);
+      const stored = localStorage.getItem(`tablo_cart_${slug}_${tableSlug}`);
       if (!stored) return [];
       const parsed = JSON.parse(stored);
       return Array.isArray(parsed) ? parsed : [];
@@ -167,7 +167,7 @@ export function QRMenuPage() {
   const sectionRefs = useRef<Record<string, HTMLElement | null>>({});
 
   const fetchData = useCallback(async () => {
-    if (!slug || !tableId) {
+    if (!slug || !tableSlug) {
       setError("Invalid menu link.");
       setIsLoading(false);
       return;
@@ -191,7 +191,7 @@ export function QRMenuPage() {
       const { data: tableData, error: tableError } = await supabase
         .from("restaurant_tables")
         .select("id, table_number")
-        .eq("qr_code_identifier", tableId)
+        .eq("qr_slug", tableSlug)
         .eq("restaurant_id", restData.id)
         .maybeSingle();
 
@@ -233,17 +233,17 @@ export function QRMenuPage() {
     } finally {
       setIsLoading(false);
     }
-  }, [slug, tableId]);
+  }, [slug, tableSlug]);
 
   useEffect(() => {
     fetchData();
   }, [fetchData]);
 
   useEffect(() => {
-    if (slug && tableId) {
-      localStorage.setItem(`tablo_cart_${slug}_${tableId}`, JSON.stringify(cart));
+    if (slug && tableSlug) {
+      localStorage.setItem(`tablo_cart_${slug}_${tableSlug}`, JSON.stringify(cart));
     }
-  }, [cart, slug, tableId]);
+  }, [cart, slug, tableSlug]);
 
   useEffect(() => {
     const handleScroll = () => {

@@ -240,6 +240,7 @@ export function TableManagementPage() {
       restaurant_id: restaurantId,
       table_number: tableNumber.trim(),
       qr_code_identifier: crypto.randomUUID(),
+      qr_slug: `table-${tableNumber.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-')}`,
     };
 
     try {
@@ -321,7 +322,7 @@ export function TableManagementPage() {
     const printWindow = window.open("", "_blank");
     if (!printWindow) return;
     
-    const url = getQrUrl(selectedTable.qr_code_identifier);
+    const url = getQrUrl(selectedTable.qr_slug);
     const svgElement = document.getElementById("qr-svg-element");
     const svgHtml = svgElement ? svgElement.outerHTML : "";
 
@@ -552,7 +553,7 @@ export function TableManagementPage() {
                         </TableCell>
                         <TableCell className="text-muted-foreground py-4">
                           <code className="rounded bg-muted/50 px-2 py-1 text-xs font-mono">
-                            /menu/{restaurantSlug}/...{table.qr_code_identifier.slice(-6)}
+                            /menu/{restaurantSlug}/{table.qr_slug}
                           </code>
                         </TableCell>
                         <TableCell className="text-right py-4">
@@ -667,19 +668,19 @@ export function TableManagementPage() {
               <div className="overflow-hidden rounded-xl border-2 p-4 shadow-sm bg-white">
                 <QRCodeSVG 
                   id="qr-svg-element"
-                  value={getQrUrl(selectedTable.qr_code_identifier)} 
+                  value={getQrUrl(selectedTable.qr_slug)} 
                   size={220}
                   level="H"
                 />
               </div>
               <div className="w-full text-center">
                 <a 
-                  href={getQrUrl(selectedTable.qr_code_identifier)}
+                  href={getQrUrl(selectedTable.qr_slug)}
                   target="_blank"
                   rel="noreferrer"
                   className="text-xs text-primary hover:underline break-all"
                 >
-                  {getQrUrl(selectedTable.qr_code_identifier)}
+                  {getQrUrl(selectedTable.qr_slug)}
                 </a>
               </div>
             </div>
